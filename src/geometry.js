@@ -367,7 +367,7 @@ exports.mapMarkers = function(size, markers, positions, className) {
 		ret.push({type:"circle", cx:x, cy:y, r:r, class:cls });
 
 	} 
-	else if("circle_cradient" == markers[k]){
+	else if("circle_gradient" == markers[k]){
 		console.log('GRADIENT')
 		cls = markers[k] + ' ' + className[k] + " on" + (positions[k] || positions[other(k, size)] || "white");
 		r = step / 3.5;
