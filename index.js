@@ -11,6 +11,7 @@ exports.shapeLabels = require('./src/geometry').shapeLabels;
 exports.shapeStones = require('./src/geometry').shapeStones;
 exports.shapeStone = require('./src/geometry').shapeStone;
 exports.shapeMarkers = require('./src/geometry').shapeMarkers;
+exports.mapMarkers = require('./src/geometry').mapMarkers;
 exports.shapeArea = require('./src/geometry').shapeArea;
 
 exports.defineRadialColors = require('./src/styles').defineRadialColors;
