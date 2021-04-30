@@ -1,9 +1,3 @@
-/**
- * SVGoban
- * geometry.js
- *
- */
-
 var SV_GRID_SIZE = 560;
 var SV_MARGIN = 30;
 var SV_BORDER_SHRINK = 7;
@@ -23,13 +17,13 @@ var CODE_a = 97;
  * @returns {string}
  */
 var horizontal = function(i, coordSystem) {
-    if ("aa" === coordSystem) {
+	if ("aa" === coordSystem) {
 	return String.fromCharCode(CODE_a + --i);
-    }
-    else { // "A1" (default)
+	}
+	else { // "A1" (default)
 	var skipI = i >= 9 ? 1 : 0;
 	return String.fromCharCode(CODE_A + --i + skipI);
-    }
+	}
 }
 
 /**
@@ -41,12 +35,12 @@ var horizontal = function(i, coordSystem) {
  * @returns {string}
  */
 var vertical = function(j, coordSystem, size) {
-    if ("aa" === coordSystem) {
+	if ("aa" === coordSystem) {
 	return String.fromCharCode(CODE_a + --j);
-    }
-    else { // "A1" (default)
+	}
+	else { // "A1" (default)
 	return (size - --j).toString();
-    }
+	}
 }
 
 /**
@@ -57,18 +51,18 @@ var vertical = function(j, coordSystem, size) {
  * @returns {Object}
  */
 var toColRow = function(intersection, size) {
-    var i, j;
-    if (intersection.charCodeAt(1) > CODE_9) { // "aa"
+	var i, j;
+	if (intersection.charCodeAt(1) > CODE_9) { // "aa"
 	i = intersection.charCodeAt(0) - CODE_a + 1;
 	j = intersection.charCodeAt(1) - CODE_a + 1;
-    }
-    else { // "A1"
+	}
+	else { // "A1"
 	i = intersection.charCodeAt(0) - CODE_A + 1;
 	var skipI = i >= 9 ? 1 : 0;
 	i -= skipI;
 	j = size - (+intersection.substring(1)) + 1;
-    }
-    return {i: i, j: j};
+	}
+	return {i: i, j: j};
 }
 
 /**
@@ -79,20 +73,20 @@ var toColRow = function(intersection, size) {
  * @returns {string}
  */
 var other = function(intersection, size) {
-    var i, j, ret;
-    if (intersection.charCodeAt(1) > CODE_9) { // "aa"
+	var i, j, ret;
+	if (intersection.charCodeAt(1) > CODE_9) { // "aa"
 	i = intersection.charCodeAt(0) - CODE_a + 1;
 	j = intersection.charCodeAt(1) - CODE_a + 1;
 	ret = horizontal(i, "A1") + vertical(j, "A1", size);
-    }
-    else { // "A1"
+	}
+	else { // "A1"
 	i = intersection.charCodeAt(0) - CODE_A + 1;
 	var skipI = i >= 9 ? 1 : 0;
 	i -= skipI;
 	j = size - (+intersection.substring(1)) + 1;
 	ret = horizontal(i, "aa") + vertical(j, "aa", size);
-    }
-    return ret;
+	}
+	return ret;
 }
 
 
@@ -103,19 +97,19 @@ var other = function(intersection, size) {
  * @returns {Array} 
  */
 exports.shapeBackground = function(noMargin) {
-    var offset, sz, cls;
-    var ret = [];
+	var offset, sz, cls;
+	var ret = [];
 
-    cls = "wood";
-    if (noMargin) {
+	cls = "wood";
+	if (noMargin) {
 	offset = SV_MARGIN + SV_BORDER_SHRINK;
 	sz = SV_GRID_SIZE - 2*SV_BORDER_SHRINK;
-    } else {
+	} else {
 	offset = 30;
 	sz = SV_GRID_SIZE + 2*SV_MARGIN - 60;
-    }
-    ret.push({type:"rect", class:cls, x:offset, y:offset, width:sz, height:sz});
-    return ret;
+	}
+	ret.push({type:"rect", class:cls, x:offset, y:offset, width:sz, height:sz});
+	return ret;
 }
 
 /**
@@ -125,35 +119,35 @@ exports.shapeBackground = function(noMargin) {
  * @returns {Array} 
  */
 exports.shapeGrid = function(size) {
-    size = +size;
-    var step = SV_GRID_SIZE / (size + 1);
-    var x1, y1, x2, y2;
-    var ret = [];
+	size = +size;
+	var step = SV_GRID_SIZE / (size + 1);
+	var x1, y1, x2, y2;
+	var ret = [];
 
-    var s = {
+	var s = {
 	"stroke-width":1, 
 	"shape-rendering":"crispEdges",
 	"vector-effect":"non-scaling-stroke"
-    };
+	};
 
-    var d = "";
-    for (var i = 1; i <= size; i++) {
+	var d = "";
+	for (var i = 1; i <= size; i++) {
 	x1 = SV_MARGIN + step;
 	y1 = SV_MARGIN + i * step;
 	x2 = SV_MARGIN + SV_GRID_SIZE - step;
 	y2 = SV_MARGIN + i * step;
 	d += "M" + x1 + " " + y1 + "H " + x2 + " ";
-    }
-    for (var j = 1; j <= size; j++) {
+	}
+	for (var j = 1; j <= size; j++) {
 	x1 = SV_MARGIN + j * step;
 	y1 = SV_MARGIN + step;
 	x2 = SV_MARGIN + j * step;
 	y2 = SV_MARGIN + SV_GRID_SIZE - step;
 	d += "M" + x1 + " " + y1 + "V " + y2 + " ";
-    } 
-    /** Replace multiple lines with one SVG path */
-    ret.push({type:"path", d:d, style:s});
-    return ret;
+	} 
+	/** Replace multiple lines with one SVG path */
+	ret.push({type:"path", d:d, style:s});
+	return ret;
 }
 
 /**
@@ -163,52 +157,53 @@ exports.shapeGrid = function(size) {
  * @returns {Array} 
  */
 exports.shapeStarPoints = function(size) {
-    size = +size;
-    var step = SV_GRID_SIZE / (size + 1);
-    var cx, cy, r;
-    var ret = [];
-    var evenSize = size % 2;
-    var midStars = 1;
-    var starPadding = 4;
-    if (size < 12) {
+	size = +size;
+	var step = SV_GRID_SIZE / (size + 1);
+	var cls = 'star_points'
+	var cx, cy, r;
+	var ret = [];
+	var evenSize = size % 2;
+	var midStars = 1;
+	var starPadding = 4;
+	if (size < 12) {
 	starPadding = 3;
 	midStars = 0;
-    }
-    r = step / 10;
-    cx = SV_MARGIN + starPadding * step;
-    cy = SV_MARGIN + starPadding * step;
-    ret.push({type:"circle", cx:cx, cy:cy, r:r});
-    cx = SV_MARGIN - starPadding * step + SV_GRID_SIZE;
-    cy = SV_MARGIN + starPadding * step;
-    ret.push({type:"circle", cx:cx, cy:cy, r:r});
-    cx = SV_MARGIN + starPadding * step;
-    cy = SV_MARGIN - starPadding * step + SV_GRID_SIZE;
-    ret.push({type:"circle", cx:cx, cy:cy, r:r});
-    cx = SV_MARGIN - starPadding * step + SV_GRID_SIZE;
-    cy = SV_MARGIN - starPadding * step + SV_GRID_SIZE;
-    ret.push({type:"circle", cx:cx, cy:cy, r:r});
-    /** Central star point */
-    if (evenSize == 1) {
+	}
+	r = step / 10;
+	cx = SV_MARGIN + starPadding * step;
+	cy = SV_MARGIN + starPadding * step;
+	ret.push({type:"circle", class:cls, cx:cx, cy:cy, r:r});
+	cx = SV_MARGIN - starPadding * step + SV_GRID_SIZE;
+	cy = SV_MARGIN + starPadding * step;
+	ret.push({type:"circle", class:cls, cx:cx, cy:cy, r:r});
+	cx = SV_MARGIN + starPadding * step;
+	cy = SV_MARGIN - starPadding * step + SV_GRID_SIZE;
+	ret.push({type:"circle", class:cls, cx:cx, cy:cy, r:r});
+	cx = SV_MARGIN - starPadding * step + SV_GRID_SIZE;
+	cy = SV_MARGIN - starPadding * step + SV_GRID_SIZE;
+	ret.push({type:"circle", class:cls, cx:cx, cy:cy, r:r});
+	/** Central star point */
+	if (evenSize == 1) {
 	cx = SV_MARGIN + (size + 1) / 2 * step;
 	cy = SV_MARGIN + (size + 1) / 2 * step;
-	ret.push({type:"circle", cx:cx, cy:cy, r:r});
+	ret.push({type:"circle", class:cls, cx:cx, cy:cy, r:r});
 	/** 3rd star point */
 	if (midStars == 1) {
 	cx = SV_MARGIN + (size + 1) / 2 * step;
 	cy = SV_MARGIN + starPadding * step;
-	ret.push({type:"circle", cx:cx, cy:cy, r:r});
+	ret.push({type:"circle", class:cls, cx:cx, cy:cy, r:r});
 	cx = SV_MARGIN + starPadding * step;
 	cy = SV_MARGIN + (size + 1) / 2 * step;
-	ret.push({type:"circle", cx:cx, cy:cy, r:r});
+	ret.push({type:"circle", class:cls, cx:cx, cy:cy, r:r});
 	cx = SV_MARGIN + (size + 1) / 2 * step;
 	cy = SV_MARGIN - starPadding * step + SV_GRID_SIZE;
-	ret.push({type:"circle", cx:cx, cy:cy, r:r});
+	ret.push({type:"circle", class:cls, cx:cx, cy:cy, r:r});
 	cx = SV_MARGIN - starPadding * step + SV_GRID_SIZE;
 	cy = SV_MARGIN + (size + 1) / 2 * step;
-	ret.push({type:"circle", cx:cx, cy:cy, r:r});
+	ret.push({type:"circle", class:cls, cx:cx, cy:cy, r:r});
 	}
-    }
-    return ret;
+	}
+	return ret;
 }
 
 /**
@@ -218,20 +213,20 @@ exports.shapeStarPoints = function(size) {
  * @returns {Array} 
  */
 exports.shapeLabels = function(size, coordSystem) {
-    size = +size;
-    coordSystem = coordSystem || "A1";
-    var step = SV_GRID_SIZE / (size + 1);
-    var x, y, txt;
-    var ret = [];
-    
-    for ( var i = 1; i <= size; i++ ) {
+	size = +size;
+	coordSystem = coordSystem || "A1";
+	var step = SV_GRID_SIZE / (size + 1);
+	var x, y, txt;
+	var ret = [];
+
+	for ( var i = 1; i <= size; i++ ) {
 
 	/** Top row */
 	x = SV_MARGIN + i * step;
 	y = SV_MARGIN + 25;
 	txt = horizontal(i, coordSystem);
 	var s = {
-	    "text-anchor":"middle" 
+		"text-anchor":"middle" 
 	};
 	ret.push({type:"text", x:x, y:y, txt:txt, style:s});
 
@@ -240,19 +235,19 @@ exports.shapeLabels = function(size, coordSystem) {
 	y = SV_MARGIN + SV_GRID_SIZE - 15;
 	txt = horizontal(i, coordSystem);
 	var s = {
-	    "text-anchor":"middle" 
+		"text-anchor":"middle" 
 	};
 	ret.push({type:"text", x:x, y:y, txt:txt, style:s});
-    }
-    for ( var j = 1; j <= size; j++ ) {
+	}
+	for ( var j = 1; j <= size; j++ ) {
 
 	/** Left column */
 	x = SV_MARGIN + 25;
 	y = SV_MARGIN + j * step;
 	txt = vertical(j, coordSystem, size);
 	var s = {
-	    "text-anchor":"end", 
-	    "dominant-baseline":"central"
+		"text-anchor":"end", 
+		"dominant-baseline":"central"
 	};
 	ret.push({type:"text", x:x, y:y, txt:txt, style:s});
 
@@ -261,12 +256,12 @@ exports.shapeLabels = function(size, coordSystem) {
 	y = SV_MARGIN + j * step;
 	txt = vertical(j, coordSystem, size);
 	var s = {
-	    "text-anchor":"start", 
-	    "dominant-baseline":"central"
+		"text-anchor":"start", 
+		"dominant-baseline":"central"
 	};
 	ret.push({type:"text", x:x, y:y, txt:txt, style:s});
-    }
-    return ret;
+	}
+	return ret;
 }
 
 /**
@@ -277,33 +272,33 @@ exports.shapeLabels = function(size, coordSystem) {
  * @returns {Array} 
  */
 exports.shapeStones = function(size, positions) {
-    size = +size;
-    var step = SV_GRID_SIZE / (size + 1);
-    var cx, cy, r, cls;
-    var ret = [];
-    var hA1, haa, vA1, vaa, target, coordA1;
+	size = +size;
+	var step = SV_GRID_SIZE / (size + 1);
+	var cx, cy, r, cls;
+	var ret = [];
+	var hA1, haa, vA1, vaa, target, coordA1;
 
-    for ( var i = 1; i <= size; i++ ) {
+	for ( var i = 1; i <= size; i++ ) {
 	hA1 = horizontal(i, "A1");
 	haa = horizontal(i, "aa");
 	cx = SV_MARGIN + i * step;
 
 	for ( var j = 1; j <= size; j++ ) {
-	    vA1 = vertical(j, "A1", size);
-	    vaa = vertical(j, "aa", size);
-	    coordA1 = hA1 + vA1;
-	    target = positions[hA1 + vA1] || positions[haa + vaa];
+		vA1 = vertical(j, "A1", size);
+		vaa = vertical(j, "aa", size);
+		coordA1 = hA1 + vA1;
+		target = positions[hA1 + vA1] || positions[haa + vaa];
 
-	    cls = "stone";
-	    cls += target ? " " + target + "stone" : " placeholder";
-	    cls += " " + coordA1;
+		cls = "stone";
+		cls += target ? " " + target + "stone" : " placeholder";
+		cls += " " + coordA1;
 
-	    cy = SV_MARGIN + j * step;
-	    r = step / 2.1;
-	    ret.push({type:"circle", key:coordA1, cx:cx, cy:cy, r:r, class:cls });
+		cy = SV_MARGIN + j * step;
+		r = step / 2.1;
+		ret.push({type:"circle", key:coordA1, cx:cx, cy:cy, r:r, class:cls });
 	}
-    }
-    return ret;
+	}
+	return ret;
 }
 
 /**
@@ -315,20 +310,20 @@ exports.shapeStones = function(size, positions) {
  * @returns {Array}
  */
 exports.shapeStone = function(size, intersection, color) {
-    size = +size;
-    var step = SV_GRID_SIZE / (size + 1);
-    var cx, cy, r, cls;
-    var ret = [];
-    var rowcol = toColRow(intersection, size);
-    cls = "stone";
-    color = (color == "placeholder") ? color : color + cls;
-    cls += " " + color;
-    cls += " " + intersection;
-    cx = SV_MARGIN + rowcol.i * step;
-    cy = SV_MARGIN + rowcol.j * step;
-    r = step / 2.1;
-    ret.push({type:"circle", key:intersection, cx:cx, cy:cy, r:r, class:cls });
-    return ret;
+	size = +size;
+	var step = SV_GRID_SIZE / (size + 1);
+	var cx, cy, r, cls;
+	var ret = [];
+	var rowcol = toColRow(intersection, size);
+	cls = "stone";
+	color = (color == "placeholder") ? color : color + cls;
+	cls += " " + color;
+	cls += " " + intersection;
+	cx = SV_MARGIN + rowcol.i * step;
+	cy = SV_MARGIN + rowcol.j * step;
+	r = step / 2.1;
+	ret.push({type:"circle", key:intersection, cx:cx, cy:cy, r:r, class:cls });
+	return ret;
 }
 
 /**
@@ -340,135 +335,157 @@ exports.shapeStone = function(size, intersection, color) {
  * @returns {Array}
  */
 exports.mapMarkers = function(size, markers, positions, className) {
-    size = +size;
-    var step = SV_GRID_SIZE / (size + 1);
-    var x, y, x1, y1, x2, y2, cls, points;
-    var ret = [];
-    var coord;
+	size = +size;
+	var step = SV_GRID_SIZE / (size + 1);
+	var x, y, x1, y1, x2, y2, cls, points;
+	var ret = [];
+	var coord;
 
-    for (var k in markers) {
-
+	for (var k in markers) {
+		// console.log(markers[k])
 	var rowcol = toColRow(k, size);
 	x = SV_MARGIN + rowcol.i * step;
 	y = SV_MARGIN + rowcol.j * step;
 
 	if ("cross" == markers[k]) {
-	    cls = markers[k] + ' ' + className[k] + " on" + (positions[k] || "white");
-	    x1 = x - step / SV_MARKER;
-	    y1 = y;
-	    x2 = x + step / SV_MARKER;
-	    y2 = y;
-	    rot = "rotate(45," + x + "," + y + ")";
-	    ret.push({type:"line", x1:x1, y1:y1, x2:x2, y2:y2, class:cls, transform:rot});
-	    y1 = y - step / SV_MARKER;
-	    x1 = x;
-	    y2 = y + step / SV_MARKER;
-	    x2 = x;
-	    ret.push({type:"line", x1:x1, y1:y1, x2:x2, y2:y2, class:cls, transform:rot});
+		cls = markers[k] + ' ' + className[k] + " on" + (positions[k] || "white");
+		x1 = x - step / SV_MARKER;
+		y1 = y;
+		x2 = x + step / SV_MARKER;
+		y2 = y;
+		rot = "rotate(45," + x + "," + y + ")";
+		ret.push({type:"line", x1:x1, y1:y1, x2:x2, y2:y2, class:cls, transform:rot});
+		y1 = y - step / SV_MARKER;
+		x1 = x;
+		y2 = y + step / SV_MARKER;
+		x2 = x;
+		ret.push({type:"line", x1:x1, y1:y1, x2:x2, y2:y2, class:cls, transform:rot});
 
 	} else if ("circle" == markers[k]) {
-	    cls = markers[k] + ' ' + className[k] + " on" + (positions[k] || positions[other(k, size)] || "white");
-	    r = step / 3.5;
-	    ret.push({type:"circle", cx:x, cy:y, r:r, class:cls });
+		cls = markers[k] + ' on_green_stroke'; 
+		r = step / 3.5;
+		ret.push({type:"circle", cx:x, cy:y, r:r, class:cls });
 
-	} else if ("square" == markers[k]) {
-	    cls = markers[k] + ' ' + className[k] + " on" + (positions[k] || "white");
-	    var delta = step / SV_MARKER * Math.cos(Math.PI / 4);
-	    var side = 2 * delta;
-	    x1 = x - delta;
-	    y1 = y - delta;
-	    ret.push({type:"rect", x:x1, y:y1, width:side, height:side, class:cls});
+	} 
+	else if("circle_cradient" == markers[k]){
+		console.log('GRADIENT')
+		cls = markers[k] + ' ' + className[k] + " on" + (positions[k] || positions[other(k, size)] || "white");
+		r = step / 3.5;
+		ret.push({type:"circle", cx:x, cy:y, r:r, class:cls });
+	} 
+	else if ("square" == markers[k]) {
+		cls = markers[k] + ' ' + className[k] + " on" + (positions[k] || "white");
+		var delta = step / SV_MARKER * Math.cos(Math.PI / 4);
+		var side = 2 * delta;
+		x1 = x - delta;
+		y1 = y - delta;
+		ret.push({type:"rect", x:x1, y:y1, width:side, height:side, class:cls});
 
 	} else if ("triangle" == markers[k]) {
-	    cls = markers[k] + ' ' + className[k] + " on" + (positions[k] || "white");
-	    x1 = x;
-	    y1 = y - step / SV_MARKER;
-	    x2 = x + step / SV_MARKER * Math.cos(Math.PI / 2 + 2 * Math.PI / 3);
-	    y2 = y - step / SV_MARKER * Math.sin(Math.PI / 2 + 2 * Math.PI / 3);
-	    x3 = x + step / SV_MARKER * Math.cos(Math.PI / 2 + 4 * Math.PI / 3);
-	    y3 = y - step / SV_MARKER * Math.sin(Math.PI / 2 + 4 * Math.PI / 3);
-	    points = x1 + "," + y1 + " " + x2 + "," + y2 + " " + x3 + "," + y3;
-	    ret.push({type:"polygon", points:points, class:cls});
+		cls = markers[k] + ' ' + className[k] + " on" + (positions[k] || "white");
+		x1 = x;
+		y1 = y - step / SV_MARKER;
+		x2 = x + step / SV_MARKER * Math.cos(Math.PI / 2 + 2 * Math.PI / 3);
+		y2 = y - step / SV_MARKER * Math.sin(Math.PI / 2 + 2 * Math.PI / 3);
+		x3 = x + step / SV_MARKER * Math.cos(Math.PI / 2 + 4 * Math.PI / 3);
+		y3 = y - step / SV_MARKER * Math.sin(Math.PI / 2 + 4 * Math.PI / 3);
+		points = x1 + "," + y1 + " " + x2 + "," + y2 + " " + x3 + "," + y3;
+		ret.push({type:"polygon", points:points, class:cls});
 	} else {
-	    cls = "wood";
-	    r = step / 3;
-	    ret.push({type:"circle", cx:x, cy:y, r:r, class:cls });
-	    cls = "on" + (positions[k] || "white");
-	    var txt = markers[k];
-	    var s = {
+		cls = "wood";
+		r = step / 3;
+		ret.push({type:"circle", cx:x, cy:y, r:r, class:cls });
+		cls = "on" + (positions[k] || "white");
+		var txt = markers[k];
+		var s = {
 		"text-anchor":"middle", 
 		"dominant-baseline":"central"
-	    };
-	    ret.push({type:"text", x:x, y:y, txt:txt, style:s});
+		};
+		ret.push({type:"text", x:x, y:y, txt:txt, style:s});
 	}
-    }
-    return ret;
+	}
+	return ret;
 }
 
 exports.shapeMarkers = function(size, markers, positions, className) {
-    size = +size;
-    var step = SV_GRID_SIZE / (size + 1);
-    var x, y, x1, y1, x2, y2, cls, points;
-    var ret = [];
-    var coord;
+	size = +size;
+	var step = SV_GRID_SIZE / (size + 1);
+	var x, y, x1, y1, x2, y2, cls, points;
+	var ret = [];
+	var coord;
 
-    for (var k in markers) {
-
+	for (var k in markers) {
+		// console.log(markers[k])
 	var rowcol = toColRow(k, size);
 	x = SV_MARGIN + rowcol.i * step;
 	y = SV_MARGIN + rowcol.j * step;
 
 	if ("cross" == markers[k]) {
-	    cls = markers[k] + ' ' + className + " on" + (positions[k] || "white");
-	    x1 = x - step / SV_MARKER;
-	    y1 = y;
-	    x2 = x + step / SV_MARKER;
-	    y2 = y;
-	    rot = "rotate(45," + x + "," + y + ")";
-	    ret.push({type:"line", x1:x1, y1:y1, x2:x2, y2:y2, class:cls, transform:rot});
-	    y1 = y - step / SV_MARKER;
-	    x1 = x;
-	    y2 = y + step / SV_MARKER;
-	    x2 = x;
-	    ret.push({type:"line", x1:x1, y1:y1, x2:x2, y2:y2, class:cls, transform:rot});
+		cls = markers[k] + ' ' + className + " on" + (positions[k] || "white");
+		x1 = x - step / SV_MARKER;
+		y1 = y;
+		x2 = x + step / SV_MARKER;
+		y2 = y;
+		rot = "rotate(45," + x + "," + y + ")";
+		ret.push({type:"line", x1:x1, y1:y1, x2:x2, y2:y2, class:cls, transform:rot});
+		y1 = y - step / SV_MARKER;
+		x1 = x;
+		y2 = y + step / SV_MARKER;
+		x2 = x;
+		ret.push({type:"line", x1:x1, y1:y1, x2:x2, y2:y2, class:cls, transform:rot});
 
 	} else if ("circle" == markers[k]) {
-	    cls = markers[k] + ' ' + className + " on" + (positions[k] || positions[other(k, size)] || "white");
-	    r = step / 3.5;
-	    ret.push({type:"circle", cx:x, cy:y, r:r, class:cls });
+		cls = markers[k] + ' ' + className + " on" + (positions[k] || positions[other(k, size)] || "white");
+		r = step / 3.5;
+		x1 = x-r/2
+		y1 = y-r/2
+		ret.push({type:"circle", cx:x, cy:y, r:r, class:cls });
 
 	} else if ("square" == markers[k]) {
-	    cls = markers[k] + ' ' + className + " on" + (positions[k] || "white");
-	    var delta = step / SV_MARKER * Math.cos(Math.PI / 4);
-	    var side = 2 * delta;
-	    x1 = x - delta;
-	    y1 = y - delta;
-	    ret.push({type:"rect", x:x1, y:y1, width:side, height:side, class:cls});
+		cls = markers[k] + ' ' + className + " on" + (positions[k] || "white");
+		var delta = step / SV_MARKER * Math.cos(Math.PI / 4);
+		var side = 2 * delta;
+		x1 = x - delta;
+		y1 = y - delta;
+		ret.push({type:"rect", x:x1, y:y1, width:side, height:side, class:cls});
 
 	} else if ("triangle" == markers[k]) {
-	    cls = markers[k] + ' ' + className + " on" + (positions[k] || "white");
-	    x1 = x;
-	    y1 = y - step / SV_MARKER;
-	    x2 = x + step / SV_MARKER * Math.cos(Math.PI / 2 + 2 * Math.PI / 3);
-	    y2 = y - step / SV_MARKER * Math.sin(Math.PI / 2 + 2 * Math.PI / 3);
-	    x3 = x + step / SV_MARKER * Math.cos(Math.PI / 2 + 4 * Math.PI / 3);
-	    y3 = y - step / SV_MARKER * Math.sin(Math.PI / 2 + 4 * Math.PI / 3);
-	    points = x1 + "," + y1 + " " + x2 + "," + y2 + " " + x3 + "," + y3;
-	    ret.push({type:"polygon", points:points, class:cls});
-	} else {
-	    cls = "wood";
-	    r = step / 3;
-	    ret.push({type:"circle", cx:x, cy:y, r:r, class:cls });
-	    cls = "on" + (positions[k] || "white");
-	    var txt = markers[k];
-	    var s = {
+		cls = markers[k] + ' ' + className + " on" + (positions[k] || "white");
+		x1 = x;
+		y1 = y - step / SV_MARKER;
+		x2 = x + step / SV_MARKER * Math.cos(Math.PI / 2 + 2 * Math.PI / 3);
+		y2 = y - step / SV_MARKER * Math.sin(Math.PI / 2 + 2 * Math.PI / 3);
+		x3 = x + step / SV_MARKER * Math.cos(Math.PI / 2 + 4 * Math.PI / 3);
+		y3 = y - step / SV_MARKER * Math.sin(Math.PI / 2 + 4 * Math.PI / 3);
+		points = x1 + "," + y1 + " " + x2 + "," + y2 + " " + x3 + "," + y3;
+		ret.push({type:"polygon", points:points, class:cls});
+	}
+	else if('last_pos_marker' == markers[k]){
+		cls = markers[k] + ' ' + className + " on" + (positions[k] || positions[other(k, size)] || "white") + " last_move_marker";
+		r = step / 3.5;
+		x1 = x-r/2
+		y1 = y-r/2
+		ret.push({type:"rect", x:x1, y:y1, width:r, height:r, class:cls})
+	} 
+	else if ('best_move_show' == markers[k]){
+		cls = markers[k] + ' ' + className + " on" + (positions[k] || positions[other(k, size)] || "white") + " last_move_marker";
+		r = step / 3.5;
+		ret.push({type:"circle", cx:x, cy:y, r:r, class:cls });
+	}
+	else {
+		cls = "last_move_marker";
+		r = step / 3;
+		ret.push({type:"circle", cx:x, cy:y, r:r, class:cls });
+		cls = "on" + (positions[k] || "white");
+		var txt = markers[k];
+		var s = {
 		"text-anchor":"middle", 
 		"dominant-baseline":"central"
-	    };
-	    ret.push({type:"text", x:x, y:y, txt:txt, style:s});
+		};
+		ret.push({type:"text", x:x, y:y, txt:txt, style:s});
 	}
-    }
-    return ret;
+	}
+	return ret;
 }
 
 /**
@@ -480,55 +497,54 @@ exports.shapeMarkers = function(size, markers, positions, className) {
  * @returns {Array} viewBox (visible area)
  */
 exports.shapeArea = function(hideMargin, zoom, size) {
-    var offsetX, offsetY, lX, lY;
-    if (hideMargin) {
+	var offsetX, offsetY, lX, lY;
+	if (hideMargin) {
 	offsetX = offsetY = SV_MARGIN + SV_BORDER_SHRINK;
 	lX = lY = SV_GRID_SIZE - 2*SV_BORDER_SHRINK;
-    } else {
+	} else {
 	offsetX = offsetY = 0;
 	lX = lY = SV_GRID_SIZE + 2*SV_MARGIN;
-    }
-    if (zoom) {
+	}
+	if (zoom) {
 	size = +size;
 	var step = SV_GRID_SIZE / (size + 1);
 	var border = step / 2;
 	if ("point" == zoom.mode) {
-	    var coord = toColRow(zoom.center, size);
-	    offsetX += (coord.i - (size + 1) / 2) * step;
-	    offsetY += (coord.j - (size + 1) / 2) * step;
-	    offsetX += (1 / 2 - 1 / (2 * zoom.ratio)) * lX;
-	    offsetY += (1 / 2 - 1 / (2 * zoom.ratio)) * lY;
-	    lX /= zoom.ratio;
-	    lY /= zoom.ratio;
+		var coord = toColRow(zoom.center, size);
+		offsetX += (coord.i - (size + 1) / 2) * step;
+		offsetY += (coord.j - (size + 1) / 2) * step;
+		offsetX += (1 / 2 - 1 / (2 * zoom.ratio)) * lX;
+		offsetY += (1 / 2 - 1 / (2 * zoom.ratio)) * lY;
+		lX /= zoom.ratio;
+		lY /= zoom.ratio;
 	} else if ("zone" == zoom.mode) {
-	    switch (zoom.region) {
-	    case "NW":
+		switch (zoom.region) {
+		case "NW":
 		offsetX += 0;
 		offsetY += 0;
 		lX = lX / 2 + border;
 		lY = lY / 2 + border;
 		break;
-	    case "NE":
+		case "NE":
 		offsetX += lX / 2 - border;
 		offsetY += 0;
 		lX = lX / 2 + border;
 		lY = lY / 2 + border;
 		break;
-	    case "SE":
+		case "SE":
 		offsetX += lX / 2 - border;
 		offsetY += lY / 2 - border;
 		lX = lX / 2 + border;
 		lY = lY / 2 + border;
 		break;
-	    case "SW":
+		case "SW":
 		offsetX += 0;
 		offsetY += lY / 2 - border;
 		lX = lX / 2 + border;
 		lY = lY / 2 + border;
 		break;
-	    }
+		}
 	}
-    }
-    return [offsetX, offsetY, lX, lY];
+	}
+	return [offsetX, offsetY, lX, lY];
 }
-
