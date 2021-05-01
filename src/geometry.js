@@ -125,9 +125,9 @@ exports.shapeGrid = function(size) {
 	var ret = [];
 
 	var s = {
-	"stroke-width":1, 
-	"shape-rendering":"crispEdges",
-	"vector-effect":"non-scaling-stroke"
+	"strokeWidth":1, 
+	"shapeRendering":"crispEdges",
+	"vectorEffect":"non-scaling-stroke"
 	};
 
 	var d = "";
@@ -226,7 +226,7 @@ exports.shapeLabels = function(size, coordSystem) {
 	y = SV_MARGIN + 25;
 	txt = horizontal(i, coordSystem);
 	var s = {
-		"text-anchor":"middle" 
+		"textAnchor":"middle" 
 	};
 	ret.push({type:"text", x:x, y:y, txt:txt, style:s});
 
@@ -235,7 +235,7 @@ exports.shapeLabels = function(size, coordSystem) {
 	y = SV_MARGIN + SV_GRID_SIZE - 15;
 	txt = horizontal(i, coordSystem);
 	var s = {
-		"text-anchor":"middle" 
+		"textAnchor":"middle" 
 	};
 	ret.push({type:"text", x:x, y:y, txt:txt, style:s});
 	}
@@ -246,8 +246,8 @@ exports.shapeLabels = function(size, coordSystem) {
 	y = SV_MARGIN + j * step;
 	txt = vertical(j, coordSystem, size);
 	var s = {
-		"text-anchor":"end", 
-		"dominant-baseline":"central"
+		"textAnchor":"end", 
+		"dominantBaseline":"central"
 	};
 	ret.push({type:"text", x:x, y:y, txt:txt, style:s});
 
@@ -256,8 +256,8 @@ exports.shapeLabels = function(size, coordSystem) {
 	y = SV_MARGIN + j * step;
 	txt = vertical(j, coordSystem, size);
 	var s = {
-		"text-anchor":"start", 
-		"dominant-baseline":"central"
+		"textAnchor":"start", 
+		"dominantBaseline":"central"
 	};
 	ret.push({type:"text", x:x, y:y, txt:txt, style:s});
 	}
@@ -368,11 +368,20 @@ exports.mapMarkers = function(size, markers, positions, className) {
 
 	} 
 	else if("circle_gradient" == markers[k]){
-		console.log('GRADIENT')
 		cls = markers[k] + ' ' + className[k] + " on" + (positions[k] || positions[other(k, size)] || "white");
 		r = step / 3.5;
 		ret.push({type:"circle", cx:x, cy:y, r:r, class:cls });
 	} 
+	else if('territory_show' == markers[k]){
+		var coof = parseFloat(className[k].split('_')[1])
+		if(coof!=0){
+			var delta = step / SV_MARKER * Math.cos(Math.PI / 4) * Math.abs(coof)
+			var side = 2 * delta
+			let x1 = x - delta
+			let y1 = y - delta
+			ret.push({type:"rect", x:x1, y:y1, width:side, height:side, class: coof>0 ? 'blackstone' : 'whitestone'})
+		}
+	}
 	else if ("square" == markers[k]) {
 		cls = markers[k] + ' ' + className[k] + " on" + (positions[k] || "white");
 		var delta = step / SV_MARKER * Math.cos(Math.PI / 4);
@@ -398,8 +407,8 @@ exports.mapMarkers = function(size, markers, positions, className) {
 		cls = "on" + (positions[k] || "white");
 		var txt = markers[k];
 		var s = {
-		"text-anchor":"middle", 
-		"dominant-baseline":"central"
+		"textAnchor":"middle", 
+		"dominantBaseline":"central"
 		};
 		ret.push({type:"text", x:x, y:y, txt:txt, style:s});
 	}
@@ -479,8 +488,8 @@ exports.shapeMarkers = function(size, markers, positions, className) {
 		cls = "on" + (positions[k] || "white");
 		var txt = markers[k];
 		var s = {
-		"text-anchor":"middle", 
-		"dominant-baseline":"central"
+		"textAnchor":"middle", 
+		"dominantBaseline":"central"
 		};
 		ret.push({type:"text", x:x, y:y, txt:txt, style:s});
 	}
