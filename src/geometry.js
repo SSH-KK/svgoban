@@ -373,13 +373,11 @@ exports.mapMarkers = function(size, markers, positions, className) {
 	} 
 	else if('territory_show' == markers[k]){
 		var coof = parseFloat(className[k].split('_')[1])
-		if(coof!=0){
-			var delta = step / SV_MARKER * Math.cos(Math.PI / 4) * Math.abs(coof)
-			var side = 2 * delta
-			let x1 = x - delta
-			let y1 = y - delta
-			ret.push({type:"rect", x:x1, y:y1, width:side, height:side, class: coof>0 ? 'blackstone' : 'whitestone'})
-		}
+		var delta = step / SV_MARKER * Math.cos(Math.PI / 4) * Math.abs(coof)
+		var side = 2 * delta
+		let x1 = x - delta
+		let y1 = y - delta
+		ret.push({type:"rect", x:x1, y:y1, width:side, height:side, class: coof>=0 ? 'blackstone' : 'whitestone'})
 	}
 	else if('dead_show' == markers[k]){
 		x1 = x;
