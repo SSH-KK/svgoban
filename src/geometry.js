@@ -342,7 +342,6 @@ exports.mapMarkers = function(size, markers, positions, className) {
 	var coord;
 
 	for (var k in markers) {
-		// console.log(markers[k])
 	var rowcol = toColRow(k, size);
 	x = SV_MARGIN + rowcol.i * step;
 	y = SV_MARGIN + rowcol.j * step;
@@ -381,6 +380,16 @@ exports.mapMarkers = function(size, markers, positions, className) {
 			let y1 = y - delta
 			ret.push({type:"rect", x:x1, y:y1, width:side, height:side, class: coof>0 ? 'blackstone' : 'whitestone'})
 		}
+	}
+	else if('dead_show' == markers[k]){
+		x1 = x;
+		y1 = y - step / SV_MARKER;
+		x2 = x + step / SV_MARKER * Math.cos(Math.PI / 2 + 2 * Math.PI / 3);
+		y2 = y - step / SV_MARKER * Math.sin(Math.PI / 2 + 2 * Math.PI / 3);
+		x3 = x + step / SV_MARKER * Math.cos(Math.PI / 2 + 4 * Math.PI / 3);
+		y3 = y - step / SV_MARKER * Math.sin(Math.PI / 2 + 4 * Math.PI / 3);
+		points = x1 + "," + y1 + " " + x2 + "," + y2 + " " + x3 + "," + y3;
+		ret.push({type:"polygon", points:points, class:'dead_stone'});
 	}
 	else if ("square" == markers[k]) {
 		cls = markers[k] + ' ' + className[k] + " on" + (positions[k] || "white");
@@ -424,7 +433,6 @@ exports.shapeMarkers = function(size, markers, positions, className) {
 	var coord;
 
 	for (var k in markers) {
-		// console.log(markers[k])
 	var rowcol = toColRow(k, size);
 	x = SV_MARGIN + rowcol.i * step;
 	y = SV_MARGIN + rowcol.j * step;

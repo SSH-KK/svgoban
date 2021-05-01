@@ -8,7 +8,7 @@
 /**
  * Chosen constants for a top left radial gradient
  */
-var SV_GRAD = {
+ var SV_GRAD = {
     "cx" : "50%",
     "cy" : "45%",
     "r"  : "60%",
@@ -246,6 +246,9 @@ exports.Themes = {
 		.on_green_stroke{
 			fill: none;
 			stroke: #20E7C1;
+		}
+		.dead_stone{
+			fill: #C90000;
 		}
 		.redstone {
 			fill: url(#redgrad) !important;
